@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          path: signal-cssom
+      - uses: actions/checkout@v7
+        with:
+          repository: signal-tools/signal
+          path: signal
+      - uses: actions/checkout@v7
+        with:
+          repository: signal-tools/signal-effect
+          path: signal-effect
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 26
+          cache: npm
+          cache-dependency-path: |
+            signal/package-lock.json
+            signal-effect/package-lock.json
+            signal-cssom/package-lock.json
+      - name: Use the pinned npm CLI
+        run: npm install --global npm@12.0.2
+      - name: Install and build Signal
+        run: npm ci && npm run build
+        working-directory: signal
+      - name: Install and build Effect
+        run: npm ci --legacy-peer-deps && npm install --no-save --package-lock=false ../signal/workspaces/signal && npm run build
+        working-directory: signal-effect
+      - name: Install CSSOM dependencies and local peer
+        run: npm ci --legacy-peer-deps && npm install --no-save --package-lock=false ../signal/workspaces/signal
+        working-directory: signal-cssom
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium firefox webkit
+        working-directory: signal-cssom
+      - name: Build
+        run: npm run build
+        working-directory: signal-cssom
+      - name: Lint
+        run: npm run lint
+        working-directory: signal-cssom
+      - name: Check formatting
+        run: npm run format:check
+        working-directory: signal-cssom
+      - name: Test browsers
+        run: npm test
+        working-directory: signal-cssom
+      - name: Check package contents
+        run: npm run package:check
+        working-directory: signal-cssom

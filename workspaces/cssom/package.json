@@ -1,0 +1,51 @@
+{
+	"name": "@signal-tools/cssom",
+	"version": "0.1.0",
+	"description": "Signal-driven utilities for stylesheets and the CSS Object Model",
+	"author": "Jonathan Neal <jonathantneal@hotmail.com> (https://jonneal.dev)",
+	"homepage": "https://github.com/signal-tools/signal-cssom#readme",
+	"license": "MIT-0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		}
+	},
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/signal-tools/signal-cssom.git",
+		"directory": "workspaces/cssom"
+	},
+	"bugs": "https://github.com/signal-tools/signal-cssom/issues",
+	"sideEffects": false,
+	"keywords": [
+		"css",
+		"cssom",
+		"reactive",
+		"reactivity",
+		"signal",
+		"stylesheet",
+		"tc39"
+	],
+	"scripts": {
+		"build": "node --eval \"import('node:fs').then(({ rmSync }) => rmSync('dist', { force: true, recursive: true }))\" && tsc",
+		"prepack": "npm run build"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true,
+		"registry": "https://registry.npmjs.org/"
+	},
+	"dependencies": {
+		"@signal-tools/effect": "0.1.0"
+	},
+	"peerDependencies": {
+		"@signal-tools/signal": "*"
+	}
+}

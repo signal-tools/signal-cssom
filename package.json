@@ -1,0 +1,36 @@
+{
+	"name": "@signal-tools/cssom-workspace",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"workspaces": [
+		"workspaces/*"
+	],
+	"scripts": {
+		"build": "npm run build --workspace @signal-tools/cssom",
+		"format": "dprint fmt",
+		"format:check": "dprint check",
+		"lint": "biome check",
+		"lint:fix": "biome check --write",
+		"package:check": "npm pack --dry-run --workspace @signal-tools/cssom",
+		"test": "npm run test:chromium && npm run test:firefox && npm run test:webkit",
+		"test:chromium": "vitest run --browser.name=chromium",
+		"test:firefox": "vitest run --browser.name=firefox",
+		"test:webkit": "vitest run --browser.name=webkit"
+	},
+	"packageManager": "npm@12.0.2",
+	"allowScripts": {
+		"dprint": true,
+		"fsevents": true
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.5.7",
+		"@signal-tools/effect": "file:../signal-effect/workspaces/effect",
+		"@vitest/browser-playwright": "4.1.10",
+		"@vitest/coverage-istanbul": "4.1.10",
+		"dprint": "0.55.2",
+		"playwright": "1.62.1",
+		"typescript": "7.0.2",
+		"vitest": "4.1.10"
+	}
+}

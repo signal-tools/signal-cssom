@@ -1,0 +1,9 @@
+node_modules
+dist
+*.tsbuildinfo
+coverage
+__screenshots__
+*.local
+*.log
+.DS_Store
+*.tgz
